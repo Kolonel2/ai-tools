@@ -1,0 +1,10 @@
+{
+	admin off
+}
+
+:3080 {
+	basic_auth {
+		{env.DSH_UI_USERNAME} {env.DSH_UI_PASSHASH}
+	}
+	reverse_proxy 127.0.0.1:3081
+}
