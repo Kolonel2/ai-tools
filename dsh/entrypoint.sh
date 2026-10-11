@@ -12,6 +12,10 @@ unset DSH_UI_USERPASS
 mkdir -p "$DSH_WORKSPACE" "$DSH_HOME" /run/dsh
 rm -f /run/dsh/cookie /run/dsh/dsh.log
 
+# The NFS-backed /workspace creates every file as mode 777, but dsh refuses to
+# start unless its credentials file is owner-only.
+[ -f "$DSH_HOME/.credentials.yaml" ] && chmod 600 "$DSH_HOME/.credentials.yaml"
+
 # dsh only trusts loopback hosts unless told otherwise, and prints a one-time
 # login URL (token) on every start.
 dsh web --no-open --port 3081 --trusted-host "$DSH_PUBLIC_HOST" 2>&1 | tee /run/dsh/dsh.log &
